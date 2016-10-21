@@ -1,10 +1,22 @@
 {
   "name": "rest-api-example",
-  "main": "server.js",
   "version": "0.0.1",
+  "private": true,
+  "description": "Example API Project",
+  "keywords": [],
+  "author": "Lance Gliser",
+  "license": "",
+  "main": "app.js",
   "dependencies": {
-    "express": "~4.0.0",
-    "mongoose": "~3.6.13",
-    "body-parser": "~1.0.1"
+    "express": "^4.12.3",
+    "swagger-express-mw": "^0.1.0"
+  },
+  "devDependencies": {
+    "should": "^7.1.0",
+    "supertest": "^1.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "swagger project test"
   }
 }

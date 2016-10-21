@@ -1,0 +1,176 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Rest api examplee
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /customer:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: customer
+    get:
+      description: Returns the full list of 'customers'
+      # used as the method name of the controller
+      operationId: getAll
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/CustomerList"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: Creates a 'customer'
+      # used as the method name of the controller
+      operationId: create
+      parameters:
+        - name: data
+          description: Customer details
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Customer"
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Customer"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /customer/{id}:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: customer
+    get:
+      description: Returns a 'customer'
+      parameters:
+        - name: id
+          description: Customer id
+          in: path
+          required: true
+          type: string
+      # used as the method name of the controller
+      operationId: get
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Customer"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    put:
+      description: Updates a 'customer'
+      parameters:
+        - name: id
+          description: Customer id
+          in: path
+          required: true
+          type: string
+      # used as the method name of the controller
+      operationId: update
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Customer"
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: Deletes a 'customer'
+      parameters:
+        - name: id
+          description: Movie id
+          type: string
+          in: path
+          required: true
+      # used as the method name of the controller
+      operationId: delete
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/GeneralResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"  
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  Customer:
+    properties:
+      id:
+        type: string
+        description: Unique identifier
+      name:
+        type: string
+      adress1:
+        type: string
+        description: The lot or street address
+      adress2:
+        type: string
+        description: The subpremisis, apartment, suite
+      city:
+        type: string
+      state:
+        type: string
+        description: The 2 digit state abbreviation
+        minLength: 2
+        maxLength: 3
+      zip:
+        type: string
+        description: The 5 or 9 digit postal code. A hyphen must be included in the 9 digit format
+        minLength: 5
+        maxLength: 10
+        pattern: '^\d{5}(-\d{4})?$'
+    required:
+      - name
+  CustomerList:
+    type: array
+    items:
+      $ref: "#/definitions/Customer"
+  GeneralResponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+      description:
+        type: string
+        description: Any additional comments
+    required:
+      - success
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
