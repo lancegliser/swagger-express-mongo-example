@@ -90,6 +90,12 @@ paths:
           in: path
           required: true
           type: string
+        - name: data
+          description: Customer details
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/Customer"
       # used as the method name of the controller
       operationId: update
       responses:
@@ -107,7 +113,6 @@ paths:
       description: Deletes a 'customer'
       parameters:
         - name: id
-          description: Movie id
           type: string
           in: path
           required: true
@@ -128,15 +133,12 @@ paths:
 definitions:
   Customer:
     properties:
-      id:
-        type: string
-        description: Unique identifier
       name:
         type: string
-      adress1:
+      street:
         type: string
         description: The lot or street address
-      adress2:
+      additional:
         type: string
         description: The subpremisis, apartment, suite
       city:
@@ -163,14 +165,15 @@ definitions:
     properties:
       success:
         type: boolean
-      description:
+      message:
         type: string
-        description: Any additional comments
-    required:
-      - success
-  ErrorResponse:
     required:
       - message
+  ErrorResponse:
+    required:
+      - success
     properties:
+      success:
+        type: boolean
       message:
         type: string

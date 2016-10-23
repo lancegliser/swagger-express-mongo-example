@@ -1,5 +1,6 @@
 'use strict';
-// var util = require('util');
+const Customer = require('../schemas/customer');
+const Responses = require('../helpers/responses');
 
 module.exports = {
   getAll: getAllCustomers,
@@ -14,7 +15,14 @@ module.exports = {
  * @param {Object} response: a handle to the response object
  */
 function getAllCustomers(request, response) {
-  response.json('TODO');
+  Customer.find(function(err, customers) {
+    if (err){
+      response.status(500).send(Responses.getError({message: err.message}));
+      return;
+    }
+
+    response.json(customers);
+  });
 }
 
 
@@ -23,12 +31,19 @@ function getAllCustomers(request, response) {
  * @param {Object} response: a handle to the response object
  */
 function getCustomer(request, response) {
-  // variables defined in the Swagger document can be referenced using req.swagger.params.{parameter_name}
-  var name = request.swagger.params.name.value || 'stranger';
-  var hello = util.format('Hello, %s!', name);
+  let id = request.swagger.params.id.value;
+  Customer.findById(id, function(err, customer){
+    if (err){
+      response.status(500).send(Responses.getError({message: err.message}));
+      return;
+    }
+    if (!customer){
+      response.status(404).send(Responses.getError({message: `Customer ${id} not found.`}));
+      return;
+    }
 
-  // this sends back a JSON response which is a single string
-  response.json(hello);
+    response.json(customer);
+  });
 }
 
 /**
@@ -36,7 +51,16 @@ function getCustomer(request, response) {
  * @param {Object} response: a handle to the response object
  */
 function createCustomer(request, response) {
-  response.json('TODO');
+  Customer.create(request.body, function (err, customer) {
+    customer.save(function(err){
+      if (err){
+        response.status(500).send(Responses.getError({message: err.message}));
+        return;
+      }
+
+      response.json(customer);
+    })
+  });
 }
 
 /**
@@ -44,14 +68,49 @@ function createCustomer(request, response) {
  * @param {Object} response: a handle to the response object
  */
 function updateCustomer(request, response) {
-  response.json('TODO');
+  let id = request.swagger.params.id.value;
+  Customer.findById(id, function(err, customer) {
+    if (err) {
+      response.status(500).send(Responses.getError({message: err.message}));
+      return;
+    }
+    if (!customer) {
+      response.status(404).send(Responses.getError({message: `Customer ${id} not found.`}));
+      return;
+    }
+    customer = Object.assign(customer, request.body);
+    customer.save(id, function (err, customer) {
+      if (err) {
+        response.status(500).send(Responses.getError({message: err.message}));
+      }
+
+      response.json(customer);
+    });
+  });
 }
 
 /**
  * @param {Object} request: a handle to the request object
  * @param {Object} response: a handle to the response object
  */
-function deleteCustomer(request, response) {
-  response.json('TODO');
+function deleteCustomer(request, response){
+  let id = request.swagger.params.id.value;
+  Customer.findById(id, function(err, customer) {
+    if (err) {
+      response.status(500).send(Responses.getError({message: err.message}));
+      return;
+    }
+    if (!customer) {
+      response.status(404).send(Responses.getError({message:  `Customer ${id} not found.`}));
+      return;
+    }
+    customer.remove(id, function (err, customer) {
+      if (err) {
+        response.status(500).send(Responses.getError({message: err.message}));
+      }
+
+      response.json(Responses.getSuccess({message: `Customer ${id} deleted.`}));
+    });
+  });
 }
 
