@@ -1,6 +1,7 @@
 # Skeleton project for Swagger and mongo using the expression engine
 
 Base data model:
+~~~~
 {
   "name": "Joe Smith",
   "street": "5010 Indian Creek Pwky",
@@ -9,5 +10,6 @@ Base data model:
   "state": "KS",
   "zip": "66207"
 }
+~~~~
 
 Full crud with index available against it.
