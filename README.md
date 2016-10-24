@@ -4,11 +4,11 @@ Base data model:
 ~~~~
 {
   "name": "Joe Smith",
-  "street": "5010 Indian Creek Pwky",
-  "additional": "Apt 306",
-  "city": "Overland Park",
-  "state": "KS",
-  "zip": "66207"
+  "street": "123 Wonderland",
+  "additional": "Apt 22",
+  "city": "Kansas City",
+  "state": "MO",
+  "zip": "64105"
 }
 ~~~~
 
