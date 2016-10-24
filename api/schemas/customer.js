@@ -3,12 +3,17 @@ const mongoose = require('mongoose');
 
 const Schema = new mongoose.Schema({
     id: { type: String },
-    name: { type: String, required: true },
+    name: { type: String, required: true, index: true },
     street: { type: String, required: false },
     additional: { type: String, required: false },
     city: { type: String, required: false },
     state: { type: String, required: false, match: [/[a-zA-Z]{2,3}?/, 'State must be 2 or 3 characters'] },
-    zip: { type: String, required: true, match: [/\d{5}(-\d{4})?/, 'Zip must be 5 or 5 +4 format']  }
+    zip: {
+        type: String,
+        required: true,
+        index: true,
+        match: [/\d{5}(-\d{4})?/, 'Zip must be 5 or 5 +4 format']
+    }
 });
 
 // Virtuals
