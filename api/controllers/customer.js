@@ -15,7 +15,12 @@ module.exports = {
  * @param {Object} response: a handle to the response object
  */
 function getAllCustomers(request, response) {
-  Customer.find(function(err, customers) {
+  // Transform incoming strings to regexes to run against their field
+  let queryParams = Object.keys(request.query).reduce(function(params, key){
+    params[key] = new RegExp(request.query[key], 'i');
+    return params;
+  }, {});
+  Customer.find(queryParams, function(err, customers) {
     if (err){
       response.status(500).send(Responses.getError({message: err.message}));
       return;

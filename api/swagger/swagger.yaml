@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  title: Rest api examplee
+  title: Rest api example
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths 
@@ -25,6 +25,15 @@ paths:
       description: Returns the full list of 'customers'
       # used as the method name of the controller
       operationId: getAll
+      parameters:
+        - name: name
+          in: query
+          required: false
+          type: string
+        - name: zip
+          in: query
+          required: false
+          type: string
       responses:
         "200":
           description: Success
